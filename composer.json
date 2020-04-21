@@ -1,0 +1,34 @@
+{
+    "name": "norbybaru/passwordless-auth",
+    "description": "Laravel Passwordless login - Magic link",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "passwordless", "magic link", "laravel auth"],
+    "authors": [
+        {
+            "name": "Norby Baruani",
+            "email": "norbybaru@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "NorbyBaru\\Passwordless\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NorbyBaru\\Passwordless\\PasswordlessServiceProvider"
+            ],
+            "aliases": {
+                "Passwordless": "NorbyBaru\\Passwordless\\Facades\\Passwordless"
+            }
+        }
+    },
+    "require": {
+        "php": ">=7.1.3",
+        "ext-http": "*",
+        "illuminate/support": "^5.6 || ^6.0 || ^7.0"
+    },
+    "prefer-stable": true
+}
