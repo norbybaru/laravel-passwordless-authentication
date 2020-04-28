@@ -1,13 +1,12 @@
 <?php namespace NorbyBaru\Passwordless\Traits;
 
-
 use NorbyBaru\Passwordless\Notifications\SendMagicLinkNotification;
 
 /**
- * Class CanUsePasswordlessAuthentication
+ * Class PasswordlessAuthenticatable
  * @package NorbyBaru\Passwordless\Traits
  */
-trait CanUsePasswordlessAuthentication
+trait PasswordlessAuthenticatable
 {
 
     /**

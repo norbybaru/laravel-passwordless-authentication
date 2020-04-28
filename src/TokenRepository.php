@@ -23,6 +23,7 @@ class TokenRepository implements TokenInterface
     /** @var string  */
     protected $expires;
 
+    /** @var int  */
     protected $throttle;
 
     /**
@@ -32,23 +33,30 @@ class TokenRepository implements TokenInterface
      * @param string              $passwordlessTable
      * @param string              $hashKey
      * @param string              $expires
+     * @param int                 $throttle
      */
-    public function __construct(ConnectionInterface $connection, string $passwordlessTable, string $hashKey, string $expires)
-    {
+    public function __construct(
+        ConnectionInterface $connection,
+        string $passwordlessTable,
+        string $hashKey,
+        string $expires,
+        int $throttle = 0
+    ) {
         $this->databaseConnection = $connection;
         $this->table = $passwordlessTable;
         $this->hashKey = $hashKey;
         $this->expires = $expires;
+        $this->throttle = $throttle;
     }
 
     /**
      * Create new token
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
      *
-     * @return string
+     * @return string|null
      */
-    public function create(CanUsePasswordlessAuthentication $user): string
+    public function create(CanUsePasswordlessAuthenticatable $user):? string
     {
         if ($this->recentlyCreatedToken($user)) {
             return null;
@@ -70,22 +78,21 @@ class TokenRepository implements TokenInterface
     /**
      * Determine if the given user recently created a password reset token.
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
      *
      * @return bool
      */
-    public function recentlyCreatedToken(CanUsePasswordlessAuthentication $user): bool
+    public function recentlyCreatedToken(CanUsePasswordlessAuthenticatable $user): bool
     {
         $record = $this->getPasswordlessTable()
             ->where('email', $user->getEmailForMagicLink())
-            ->first()
-            ->toArray();
+            ->first();
 
         if (!$record) {
             return false;
         }
 
-        return $this->tokenWasRecentlyCreates($record['created_at']);
+        return $this->tokenWasRecentlyCreated($record->created_at);
     }
 
     /**
@@ -94,7 +101,7 @@ class TokenRepository implements TokenInterface
      * @param string $createdAt
      * @return bool
      */
-    private function tokenWasRecentlyCreates(string $createdAt): bool
+    private function tokenWasRecentlyCreated(string $createdAt): bool
     {
         if ($this->throttle <= 0) {
             return false;
@@ -106,24 +113,24 @@ class TokenRepository implements TokenInterface
     }
 
     /**
-     * Token exits abd valid
+     * Token exits and valid
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
-     * @param string                                                   $token
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
+     * @param string                                                    $token
+     *
      * @return bool
      */
-    public function exist(CanUsePasswordlessAuthentication $user, string $token)
+    public function exist(CanUsePasswordlessAuthenticatable $user, string $token)
     {
         $result = $this->getPasswordlessTable()
             ->where('email', $user->getEmailForMagicLink())
-            ->first()
-            ->toArray();
+            ->first();
 
         if (!$result) {
             return false;
         }
 
-        return !$this->tokenExpired($result['created_at']) && Hash::check($token, $result['token']);
+        return !$this->tokenExpired($result->created_at) && Hash::check($token, $result->token);
     }
 
     /**
@@ -138,11 +145,11 @@ class TokenRepository implements TokenInterface
     }
 
     /**
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
      *
      * @return bool
      */
-    public function delete(CanUsePasswordlessAuthentication $user): bool
+    public function delete(CanUsePasswordlessAuthenticatable $user): bool
     {
         return (bool) $this->getPasswordlessTable()
             ->where('email', $user->getEmailForMagicLink())

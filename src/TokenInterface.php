@@ -11,30 +11,30 @@ interface TokenInterface
     /**
      * Create new Token
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
      *
      * @return string
      */
-    public function create(CanUsePasswordlessAuthentication $user);
+    public function create(CanUsePasswordlessAuthenticatable $user);
 
     /**
      * Token exists and valid
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
-     * @param string                                                   $token
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
+     * @param string                                                    $token
      *
      * @return bool
      */
-    public function exist(CanUsePasswordlessAuthentication $user, string $token);
+    public function exist(CanUsePasswordlessAuthenticatable $user, string $token);
 
     /**
      * Deleted existing token
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthentication $user
+     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
      *
      * @return bool
      */
-    public function delete(CanUsePasswordlessAuthentication $user);
+    public function delete(CanUsePasswordlessAuthenticatable $user);
 
     /**
      * Delete all expired token

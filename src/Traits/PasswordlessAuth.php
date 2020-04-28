@@ -1,8 +1,10 @@
 <?php namespace NorbyBaru\Passwordless\Traits;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+use NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable;
 use NorbyBaru\Passwordless\Facades\Passwordless;
 
 /**
@@ -10,24 +12,40 @@ use NorbyBaru\Passwordless\Facades\Passwordless;
  * Trait PasswordLessAuthenticate
  * @package NorbyBaru\Passwordless\Traits
  */
-trait PasswordLessAuthenticate
+trait PasswordlessAuth
 {
     /**
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function loginByEmail(Request $request)
     {
-        $this->verifyMagicLink($request);
+        $response = $this->verifyMagicLink($request);
+
+        if (!$response instanceof CanUsePasswordlessAuthenticatable) {
+
+            if ($request->wantsJson()) {
+                throw ValidationException::withMessages([
+                    'email' => [trans($response)],
+                ]);
+            }
+
+            return redirect()->to($this->redirectRoute($request))
+                    ->withInput($request->only('email'))
+                    ->withErrors(['email' => trans($response)]);
+        }
+
+        $this->authenticateUser($response);
 
         if ($response = $this->authenticatedResponse($request, auth()->user())) {
             return $response;
         }
 
         return $request->wantsJson()
-            ? new Response('', 204)
+            ? new JsonResponse([], 204)
             : redirect()->intended($this->redirectRoute($request));
     }
 
@@ -52,6 +70,7 @@ trait PasswordLessAuthenticate
     /**
      * @param Request $request
      *
+     * @return bool|\Illuminate\Contracts\Auth\Authenticatable|\NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable|null
      * @throws AuthorizationException
      */
     protected function verifyMagicLink(Request $request)
@@ -60,14 +79,22 @@ trait PasswordLessAuthenticate
 
         $user = $this->magicLink()->validateMagicLink($this->requestCredentials($request));
 
-        if (!$user) {
-            throw new AuthorizationException;
+        if (! $user instanceof CanUsePasswordlessAuthenticatable) {
+            return $user;
         }
 
         if (! hash_equals((string) $this->requestCredentials($request)['hash'], sha1($user->getEmailForMagicLink()))) {
             throw new AuthorizationException;
         }
 
+        return $user;
+    }
+
+    /**
+     * @param $user
+     */
+    public function authenticateUser($user)
+    {
         auth()->login($user);
     }
 

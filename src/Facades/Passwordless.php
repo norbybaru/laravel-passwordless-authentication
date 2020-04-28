@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Facade;
+use NorbyBaru\Passwordless\MagicLink;
 
 /**
  * Class Passwordless
@@ -13,6 +14,33 @@ use Illuminate\Support\Facades\Facade;
  */
 class Passwordless extends Facade
 {
+    /**
+     * Constant representing a successfully sent reminder.
+     *
+     * @var string
+     */
+    const MAGIC_LINK_SENT = MagicLink::MAGIC_LINK_SENT;
+
+    /**
+     * Constant representing a successfully sent reminder.
+     *
+     * @var string
+     */
+    const MAGIC_LINK_VERIFIED = MagicLink::MAGIC_LINK_VERIFIED;
+
+    /**
+     * Constant representing the user not found response.
+     *
+     * @var string
+     */
+    const INVALID_USER = MagicLink::INVALID_USER;
+
+    /**
+     * Constant representing an invalid token.
+     *
+     * @var string
+     */
+    const INVALID_TOKEN = MagicLink::INVALID_TOKEN;
 
     /**
      * Get the registered name of the component.

@@ -3,6 +3,8 @@
 
 
 use Carbon\Carbon;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
@@ -12,8 +14,10 @@ use Illuminate\Support\Facades\URL;
  * Class SendMagicLinkNotification
  * @package NorbyBaru\Passwordless\Notifications
  */
-class SendMagicLinkNotification extends Notification
+class SendMagicLinkNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     /** @var string  */
     protected $token;
 
@@ -47,10 +51,10 @@ class SendMagicLinkNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(Lang::get('Sign in to') . env('APP_NAME', 'Laravel'))
+            ->subject(Lang::get('Sign in to :app_name', ['app_name' => env('APP_NAME', 'Laravel')]))
             ->line(Lang::get('Click the link below to sign in to your account.'))
-            ->action(Lang::get('Sign In'), $this->verificationUrl($notifiable))
             ->line(Lang::get('This link will expire in :count minutes and can only be used once.', ['count' => config('passwordless.magic_link_timeout')]))
+            ->action(Lang::get('Sign In to :app_name', ['app_name' => env('APP_NAME', 'Laravel')]), $this->verificationUrl($notifiable))
             ->line(Lang::get('If you did not make this request, no further action is required.'));
     }
 
@@ -64,7 +68,7 @@ class SendMagicLinkNotification extends Notification
     {
          return URL::temporarySignedRoute(
             'passwordless.login',
-            Carbon::now()->addSeconds(config('passwordless.magic_link_timeout')),
+            Carbon::now()->addMinutes(config('passwordless.magic_link_timeout')),
             [
                 'email' => $notifiable->getEmailForMagicLink(),
                 'hash' => sha1($notifiable->getEmailForMagicLink()),

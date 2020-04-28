@@ -1,11 +1,10 @@
 <?php namespace NorbyBaru\Passwordless;
 
-
 /**
- * Interface CanUsePasswordlessAuthentication
+ * Interface CanUsePasswordlessAuthenticatable
  * @package NorbyBaru\Passwordless
  */
-interface CanUsePasswordlessAuthentication
+interface CanUsePasswordlessAuthenticatable
 {
     /**
      * Get Email address to send magic link

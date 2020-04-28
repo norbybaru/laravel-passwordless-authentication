@@ -45,7 +45,13 @@ class PasswordlessManager
 
         $config =  $this->getPasswordlessConfig();
 
-        return new TokenRepository($this->app['db']->connection(), $config['table'], $key, $config['expire']);
+        return new TokenRepository(
+            $this->app['db']->connection(),
+            $config['table'],
+            $key,
+            $config['expire'],
+            $config['throttle']
+        );
     }
 
     /**

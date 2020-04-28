@@ -1,7 +1,7 @@
 <?php namespace NorbyBaru\Passwordless\Controller;
 
 use App\Http\Controllers\Controller;
-use NorbyBaru\Passwordless\Traits\PasswordLessAuthenticate;
+use NorbyBaru\Passwordless\Traits\PasswordlessAuth;
 
 /**
  * Class PasswordlessController
@@ -9,5 +9,5 @@ use NorbyBaru\Passwordless\Traits\PasswordLessAuthenticate;
  */
 class PasswordlessController extends Controller
 {
-    use PasswordLessAuthenticate;
+    use PasswordlessAuth;
 }
