@@ -1,2 +1,5 @@
+/.vscode
+/*.cache
 /composer.lock
 /vendor
+phpunit.xml

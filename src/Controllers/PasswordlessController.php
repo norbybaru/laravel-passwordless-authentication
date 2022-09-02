@@ -1,6 +1,8 @@
-<?php namespace NorbyBaru\Passwordless\Controller;
+<?php 
 
-use App\Http\Controllers\Controller;
+namespace NorbyBaru\Passwordless\Controllers;
+
+use Illuminate\Routing\Controller;
 use NorbyBaru\Passwordless\Traits\PasswordlessAuth;
 
 /**
