@@ -4,12 +4,11 @@
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NorbyBaru\Passwordless\Facades\Passwordless;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
 
 /**
  * Class SendMagicLinkNotification
@@ -18,6 +17,19 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SendMagicLinkNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    /** @var string  */
+    protected $token;
+
+    /**
+     * SendMagicLinkNotification constructor.
+     *
+     * @param string $token
+     */
+    public function __construct(string $token)
+    {
+        $this->token = $token;
+    }
 
     /**
      * Get the notification's channels.
@@ -54,6 +66,14 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
      */
     protected function verificationUrl($notifiable)
     {
-         return Passwordless::magicLink()->generateUrl($notifiable);
+         return URL::temporarySignedRoute(
+            'passwordless.login',
+            Carbon::now()->addMinutes(config('passwordless.magic_link_timeout')),
+            [
+                'email' => $notifiable->getEmailForMagicLink(),
+                'hash' => sha1($notifiable->getEmailForMagicLink()),
+                'token' => $this->token,
+            ]
+        );
     }
 }

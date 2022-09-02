@@ -8,7 +8,6 @@ use NorbyBaru\Passwordless\Notifications\SendMagicLinkNotification;
  */
 trait PasswordlessAuthenticatable
 {
-    protected ?string $magicLinkToken;
 
     /**
      * Get Email address to send magic link
@@ -28,17 +27,6 @@ trait PasswordlessAuthenticatable
      */
     public function sendAuthenticationMagicLink($token)
     {
-        $this->setGeneratedMagicLinkToken($token);
         $this->notify(new SendMagicLinkNotification($token));
-    }
-
-    public function getGeneratedMagicLinkToken():? string
-    {
-        return $this->magicLinkToken;
-    }
-
-    public function setGeneratedMagicLinkToken(string $token): void
-    {
-        $this->magicLinkToken = $token;
     }
 }

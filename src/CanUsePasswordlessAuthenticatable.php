@@ -20,8 +20,4 @@ interface CanUsePasswordlessAuthenticatable
      * @return void
      */
     public function sendAuthenticationMagicLink($token);
-
-    public function getGeneratedMagicLinkToken():? string;
-
-    public function setGeneratedMagicLinkToken(string $token): void;
 }
