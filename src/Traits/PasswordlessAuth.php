@@ -64,7 +64,7 @@ trait PasswordlessAuth
             return $this->redirectTo();
         }
 
-        return route('home');
+        return route(config('passwordless.default_redirect_route'));
     }
 
     /**

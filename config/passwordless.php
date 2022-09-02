@@ -15,6 +15,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default route name for redirect
+    |--------------------------------------------------------------------------
+    |
+    | Set default public route name to redirect authenticated user when successfully authenticated or failure to authenticate.
+    | This route name will only be apply when no intended url has been stored in the session to redirect user
+    | when trying to access auth page and no 'redirect_to' query params is found on the url 
+    |
+    */
+    'default_redirect_route' => 'home',
+
+    /*
+    |--------------------------------------------------------------------------
     | Auth Provider
     |--------------------------------------------------------------------------
     |
@@ -52,7 +64,8 @@ return [
     | Throttle
     |--------------------------------------------------------------------------
     |
-    |
+    | Amount of seconds to wait before generating and sending a new magic link to User.
+    | Throttling is mechanism to prevent spamming user and exhausting system resource
     |
     */
 
@@ -63,11 +76,11 @@ return [
     | Magic Link Time out
     |--------------------------------------------------------------------------
     |
-    | The expire time is the number of minutes that the magic link signature should be
+    | The expire time is the number of seconds that the magic link signature should be
     | considered valid. This security feature keeps signature short-lived so
     | they have less time to be guessed. You may change this as needed.
     |
     */
 
-    'magic_link_timeout' => 60,
+    'magic_link_timeout' => 60 * 60,
 ];
