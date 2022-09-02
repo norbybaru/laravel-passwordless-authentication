@@ -1,8 +1,10 @@
 <?php namespace NorbyBaru\Passwordless;
 
-use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Arr;
 use UnexpectedValueException;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Contracts\Auth\UserProvider;
 
 /**
  * Class Passwordless
@@ -15,7 +17,7 @@ class MagicLink
      *
      * @var string
      */
-    const INVALID_TOKEN = 'passwordless.token';
+    const INVALID_TOKEN = 'passwordless.invalid_token';
 
     /**
      * Constant representing a throttled reset attempt.
@@ -36,7 +38,7 @@ class MagicLink
      *
      * @var string
      */
-    const INVALID_USER = 'passwordless.user';
+    const INVALID_USER = 'passwordless.invalid_user';
 
     /**
      *
@@ -61,6 +63,20 @@ class MagicLink
     {
         $this->token = $tokenInterface;
         $this->user = $user;
+    }
+
+    public function generateUrl(CanUsePasswordlessAuthenticatable $notifiable, bool $absoluteSignedUrl = true): string
+    {
+        return URL::temporarySignedRoute(
+            'passwordless.login',
+            Carbon::now()->addSeconds(config('passwordless.magic_link_timeout')),
+            [
+                'email' => $notifiable->getEmailForMagicLink(),
+                'hash' => sha1($notifiable->getEmailForMagicLink()),
+                'token' => $notifiable->getGeneratedMagicLinkToken(),
+            ],
+            $absoluteSignedUrl
+        );
     }
 
     /**
