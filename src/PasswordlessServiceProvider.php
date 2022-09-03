@@ -4,9 +4,6 @@ namespace NorbyBaru\Passwordless;
 
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Class PasswordlessServiceProvider
- */
 class PasswordlessServiceProvider extends ServiceProvider
 {
     public function boot()
@@ -36,10 +33,8 @@ class PasswordlessServiceProvider extends ServiceProvider
 
     /**
      * Return config file
-     *
-     * @return string
      */
-    protected function configPath()
+    protected function configPath(): string
     {
         return __DIR__.'/../config/passwordless.php';
     }
@@ -64,10 +59,8 @@ class PasswordlessServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return ['auth.passwordless'];
     }

@@ -3,25 +3,23 @@
 namespace NorbyBaru\Passwordless\Traits;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable;
 use NorbyBaru\Passwordless\Facades\Passwordless;
+use NorbyBaru\Passwordless\MagicLink;
 
-/**
- * Trait PasswordLessAuthenticate
- */
 trait PasswordlessAuth
 {
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function loginByEmail(Request $request)
+    public function loginByEmail(Request $request): RedirectResponse|Response
     {
         $response = $this->verifyMagicLink($request);
 
@@ -48,11 +46,7 @@ trait PasswordlessAuth
             : redirect()->intended($this->redirectRoute($request));
     }
 
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    protected function redirectRoute(Request $request)
+    protected function redirectRoute(Request $request): string
     {
         if ($request->get('redirect_to')) {
             return $request->get('redirect_to');
@@ -65,13 +59,7 @@ trait PasswordlessAuth
         return route(config('passwordless.default_redirect_route'));
     }
 
-    /**
-     * @param  Request  $request
-     * @return bool|\Illuminate\Contracts\Auth\Authenticatable|\NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable|null
-     *
-     * @throws AuthorizationException
-     */
-    protected function verifyMagicLink(Request $request)
+    protected function verifyMagicLink(Request $request): string|Authenticatable|CanUsePasswordlessAuthenticatable
     {
         $request->validate($this->requestRules());
 
@@ -99,17 +87,13 @@ trait PasswordlessAuth
     /**
      * The user has been authenticated.
      *
-     * @param  Request  $request
-     * @param  mixed  $user
-     * @return mixed
+     * @return RedirectResponse|Response|null
      */
     public function authenticatedResponse(Request $request, $user)
     {
+        return null;
     }
 
-    /**
-     * @return array
-     */
     protected function requestRules(): array
     {
         return [
@@ -119,19 +103,12 @@ trait PasswordlessAuth
         ];
     }
 
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     protected function requestCredentials(Request $request): array
     {
         return $request->only(['email', 'token', 'hash']);
     }
 
-    /**
-     * @return \NorbyBaru\Passwordless\MagicLink
-     */
-    public function magicLink()
+    public function magicLink(): MagicLink
     {
         return Passwordless::magicLink();
     }

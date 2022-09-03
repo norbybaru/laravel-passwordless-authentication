@@ -2,6 +2,7 @@
 
 namespace NorbyBaru\Passwordless;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -46,18 +47,10 @@ class MagicLink
      */
     const MAGIC_LINK_VERIFIED = 'passwordless.verified';
 
-    /** @var \NorbyBaru\Passwordless\TokenInterface */
-    protected $token;
+    protected TokenInterface $token;
 
-    /** @var \Illuminate\Contracts\Auth\UserProvider */
-    protected $user;
+    protected UserProvider $user;
 
-    /**
-     * Passwordless constructor.
-     *
-     * @param  \NorbyBaru\Passwordless\TokenInterface  $tokenInterface
-     * @param  \Illuminate\Contracts\Auth\UserProvider  $user
-     */
     public function __construct(TokenInterface $tokenInterface, UserProvider $user)
     {
         $this->token = $tokenInterface;
@@ -78,11 +71,7 @@ class MagicLink
         );
     }
 
-    /**
-     * @param  array  $credentials
-     * @return bool|string
-     */
-    public function sendLink(array $credentials)
+    public function sendLink(array $credentials): string
     {
         $user = $this->findUser($credentials);
 
@@ -99,11 +88,7 @@ class MagicLink
         return static::MAGIC_LINK_SENT;
     }
 
-    /**
-     * @param  array  $credentials
-     * @return bool|\Illuminate\Contracts\Auth\Authenticatable|\NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable|null
-     */
-    public function validateMagicLink(array $credentials)
+    public function validateMagicLink(array $credentials): string|CanUsePasswordlessAuthenticatable|Authenticatable
     {
         $user = $this->findUser($credentials);
 
@@ -120,12 +105,7 @@ class MagicLink
         return $user;
     }
 
-    /**
-     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
-     * @param  string  $token
-     * @return bool
-     */
-    public function isValidToken(CanUsePasswordlessAuthenticatable $user, string $token)
+    public function isValidToken(CanUsePasswordlessAuthenticatable $user, string $token): bool
     {
         if ($this->token->exist($user, $token)) {
             return true;
@@ -134,24 +114,12 @@ class MagicLink
         return false;
     }
 
-    /**
-     * Generate Token
-     *
-     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
-     * @return string
-     */
-    public function createToken(CanUsePasswordlessAuthenticatable $user)
+    public function createToken(CanUsePasswordlessAuthenticatable $user): string
     {
         return $this->token->create($user);
     }
 
-    /**
-     * Find user by credentials supplied
-     *
-     * @param  array  $credentials
-     * @return bool|CanUsePasswordlessAuthenticatable|\Illuminate\Contracts\Auth\Authenticatable|null
-     */
-    private function findUser(array $credentials)
+    private function findUser(array $credentials): bool|CanUsePasswordlessAuthenticatable|Authenticatable
     {
         $credentials = Arr::except($credentials, ['token', 'hash']);
         $user = $this->user->retrieveByCredentials($credentials);
@@ -160,18 +128,14 @@ class MagicLink
             return false;
         }
 
-        if ($user && ! $user instanceof CanUsePasswordlessAuthenticatable) {
+        if (! $user instanceof CanUsePasswordlessAuthenticatable) {
             throw new UnexpectedValueException('User must implement CanUsePasswordlessAuthentication interface.');
         }
 
         return $user;
     }
 
-    /**
-     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
-     * @return bool
-     */
-    private function clearUserTokens(CanUsePasswordlessAuthenticatable $user)
+    private function clearUserTokens(CanUsePasswordlessAuthenticatable $user): bool
     {
         return $this->token->delete($user);
     }

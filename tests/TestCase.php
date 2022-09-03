@@ -67,7 +67,7 @@ abstract class TestCase extends OrchestraTestCase
      * @param  \Illuminate\Foundation\Application  $app
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             PasswordlessServiceProvider::class,

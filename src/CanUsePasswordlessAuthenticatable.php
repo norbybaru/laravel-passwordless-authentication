@@ -2,25 +2,17 @@
 
 namespace NorbyBaru\Passwordless;
 
-/**
- * Interface CanUsePasswordlessAuthenticatable
- */
 interface CanUsePasswordlessAuthenticatable
 {
     /**
      * Get Email address to send magic link
-     *
-     * @return string
      */
-    public function getEmailForMagicLink();
+    public function getEmailForMagicLink(): string;
 
     /**
      * Send Magic link to user to login.
-     *
-     * @param $token
-     * @return void
      */
-    public function sendAuthenticationMagicLink($token);
+    public function sendAuthenticationMagicLink(string $token): void;
 
     public function getGeneratedMagicLinkToken(): ?string;
 

@@ -15,22 +15,16 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
 
     /**
      * Get the notification's channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array|string
      */
-    public function via($notifiable)
+    public function via($notifiable): array|string
     {
         return ['mail'];
     }
 
     /**
      * Build the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject(Lang::get('Sign in to :app_name', ['app_name' => env('APP_NAME', 'Laravel')]))
@@ -42,11 +36,8 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
 
     /**
      * Get the verification URL for the given notifiable.
-     *
-     * @param  mixed  $notifiable
-     * @return string
      */
-    protected function verificationUrl($notifiable)
+    protected function verificationUrl($notifiable): string
     {
         return Passwordless::magicLink()->generateUrl($notifiable);
     }
