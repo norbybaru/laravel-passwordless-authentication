@@ -30,6 +30,9 @@
             }
         }
     },
+    "config": {
+        "sort-packages": true
+    },
     "scripts": {
         "test": "phpunit",
         "post-autoload-dump": [
