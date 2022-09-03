@@ -1,14 +1,13 @@
-<?php 
+<?php
 
 namespace NorbyBaru\Passwordless\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NorbyBaru\Passwordless\Facades\Passwordless;
 use Illuminate\Notifications\Messages\MailMessage;
-
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Lang;
+use NorbyBaru\Passwordless\Facades\Passwordless;
 
 class SendMagicLinkNotification extends Notification implements ShouldQueue
 {
@@ -49,6 +48,6 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
      */
     protected function verificationUrl($notifiable)
     {
-         return Passwordless::magicLink()->generateUrl($notifiable);
+        return Passwordless::magicLink()->generateUrl($notifiable);
     }
 }

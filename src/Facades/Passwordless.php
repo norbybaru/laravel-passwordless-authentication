@@ -1,5 +1,6 @@
-<?php namespace NorbyBaru\Passwordless\Facades;
+<?php
 
+namespace NorbyBaru\Passwordless\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use NorbyBaru\Passwordless\MagicLink;
@@ -10,7 +11,6 @@ use NorbyBaru\Passwordless\MagicLink;
  * @method static \NorbyBaru\Passwordless\MagicLink magicLink()
  *
  * @see \NorbyBaru\Passwordless\MagicLink
- * @package NorbyBaru\Passwordless\Facades
  */
 class Passwordless extends Facade
 {

@@ -3,13 +3,13 @@
 namespace NorbyBaru\Passwordless\Tests\Feature;
 
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use NorbyBaru\Passwordless\Tests\TestCase;
-use NorbyBaru\Passwordless\Facades\Passwordless;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use NorbyBaru\Passwordless\Facades\Passwordless;
 use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
+use NorbyBaru\Passwordless\Tests\TestCase;
 
 class LoginFeatureTest extends TestCase
 {
@@ -44,7 +44,7 @@ class LoginFeatureTest extends TestCase
         $this->withoutExceptionHandling();
         $this->assertGuest();
         $this->expectException(InvalidSignatureException::class);
-        $this->get($this->signedUrl . '.tempered');
+        $this->get($this->signedUrl.'.tempered');
         $this->assertGuest();
     }
 
@@ -68,7 +68,7 @@ class LoginFeatureTest extends TestCase
         $response->assertRedirect('/intended-redirect');
         $this->assertAuthenticatedAs($this->user);
     }
-    
+
     public function test_expired_token_should_not_successfully_login_user()
     {
         $this->withoutExceptionHandling();
@@ -88,11 +88,12 @@ class LoginFeatureTest extends TestCase
         $queryParams = collect(explode('&', substr($this->signedUrl, strpos($this->signedUrl, '?') + 1)))
             ->mapWithKeys(function ($value) {
                 $values = explode('=', $value);
+
                 return [$values[0] => $values[1]];
             });
         $url = Arr::first(explode('?', $this->signedUrl));
         $queryParams['email'] = $this->faker->email;
-        $temperedUrl =  $url . "?" . http_build_query($queryParams->all());
+        $temperedUrl = $url.'?'.http_build_query($queryParams->all());
         $this->expectException(InvalidSignatureException::class);
         $this->get($temperedUrl);
         $this->assertGuest();

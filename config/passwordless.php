@@ -20,7 +20,7 @@ return [
     |
     | Set default public route name to redirect authenticated user when successfully authenticated or failure to authenticate.
     | This route name will only be apply when no intended url has been stored in the session to redirect user
-    | when trying to access auth page and no 'redirect_to' query params is found on the url 
+    | when trying to access auth page and no 'redirect_to' query params is found on the url
     |
     */
     'default_redirect_route' => 'home',

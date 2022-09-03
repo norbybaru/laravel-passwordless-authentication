@@ -1,14 +1,14 @@
-<?php namespace NorbyBaru\Passwordless;
+<?php
+
+namespace NorbyBaru\Passwordless;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class PasswordlessServiceProvider
- * @package NorbyBaru\Passwordless
  */
 class PasswordlessServiceProvider extends ServiceProvider
 {
-
     public function boot()
     {
         $this->publishConfig();
@@ -31,7 +31,7 @@ class PasswordlessServiceProvider extends ServiceProvider
 
     protected function loadRoutes()
     {
-        $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
     }
 
     /**
@@ -41,7 +41,7 @@ class PasswordlessServiceProvider extends ServiceProvider
      */
     protected function configPath()
     {
-        return __DIR__ . '/../config/passwordless.php';
+        return __DIR__.'/../config/passwordless.php';
     }
 
     /**

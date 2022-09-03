@@ -34,10 +34,11 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "phpunit",
+        "pint": "./vendor/bin/pint -v",
         "post-autoload-dump": [
             "@php ./vendor/bin/testbench package:discover --ansi"
-        ]
+        ],
+        "test": "phpunit"
     },
     "require": {
         "php": "^8.0",
@@ -45,6 +46,7 @@
     },
     "prefer-stable": true,
     "require-dev": {
+        "laravel/pint": "^1.1",
         "orchestra/testbench": "^6.24|^7.0",
         "phpunit/phpunit": "^9.5"
     }

@@ -1,21 +1,21 @@
-<?php namespace NorbyBaru\Passwordless;
+<?php
 
+namespace NorbyBaru\Passwordless;
 
 use Illuminate\Support\Str;
 
 /**
  * Class PasswordlessManager
- * @package NorbyBaru\Passwordless
  */
 class PasswordlessManager
 {
-    /** @var \Illuminate\Contracts\Foundation\Application  */
+    /** @var \Illuminate\Contracts\Foundation\Application */
     protected $app;
 
     /**
      * PasswordlessManager constructor.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      */
     public function __construct($app)
     {
@@ -27,7 +27,7 @@ class PasswordlessManager
      */
     public function magicLink(): MagicLink
     {
-        $config =  $this->getPasswordlessConfig();
+        $config = $this->getPasswordlessConfig();
 
         return new MagicLink(
             $this->createTokenRepository(),
@@ -43,7 +43,7 @@ class PasswordlessManager
             $key = base64_decode(substr($key, 7));
         }
 
-        $config =  $this->getPasswordlessConfig();
+        $config = $this->getPasswordlessConfig();
 
         return new TokenRepository(
             $this->app['db']->connection(),
@@ -61,7 +61,6 @@ class PasswordlessManager
     {
         return $this->app['config']['auth.providers.users'];
     }
-
 
     /**
      * @return array

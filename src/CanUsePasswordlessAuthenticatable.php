@@ -1,8 +1,9 @@
-<?php namespace NorbyBaru\Passwordless;
+<?php
+
+namespace NorbyBaru\Passwordless;
 
 /**
  * Interface CanUsePasswordlessAuthenticatable
- * @package NorbyBaru\Passwordless
  */
 interface CanUsePasswordlessAuthenticatable
 {
@@ -21,7 +22,7 @@ interface CanUsePasswordlessAuthenticatable
      */
     public function sendAuthenticationMagicLink($token);
 
-    public function getGeneratedMagicLinkToken():? string;
+    public function getGeneratedMagicLinkToken(): ?string;
 
     public function setGeneratedMagicLinkToken(string $token): void;
 }

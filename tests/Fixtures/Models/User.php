@@ -2,8 +2,8 @@
 
 namespace NorbyBaru\Passwordless\Tests\Fixtures\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable;
 use NorbyBaru\Passwordless\Traits\PasswordlessAuthenticatable;
 

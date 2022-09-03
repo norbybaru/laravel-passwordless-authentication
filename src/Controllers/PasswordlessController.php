@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace NorbyBaru\Passwordless\Controllers;
 
@@ -7,7 +7,6 @@ use NorbyBaru\Passwordless\Traits\PasswordlessAuth;
 
 /**
  * Class PasswordlessController
- * @package NorbyBaru\Passwordless\Controller
  */
 class PasswordlessController extends Controller
 {

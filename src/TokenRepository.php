@@ -1,4 +1,6 @@
-<?php namespace NorbyBaru\Passwordless;
+<?php
+
+namespace NorbyBaru\Passwordless;
 
 use Carbon\Carbon;
 use Illuminate\Database\ConnectionInterface;
@@ -7,33 +9,32 @@ use Illuminate\Support\Str;
 
 /**
  * Class TokenRepository
- * @package NorbyBaru\Passwordless
  */
 class TokenRepository implements TokenInterface
 {
-    /** @var \Illuminate\Database\ConnectionInterface  */
+    /** @var \Illuminate\Database\ConnectionInterface */
     protected $databaseConnection;
 
     /** @var string */
     protected $table;
 
-    /** @var string  */
+    /** @var string */
     protected $hashKey;
 
-    /** @var string  */
+    /** @var string */
     protected $expires;
 
-    /** @var int  */
+    /** @var int */
     protected $throttle;
 
     /**
      * TokenRepository constructor.
      *
-     * @param ConnectionInterface $connection
-     * @param string              $passwordlessTable
-     * @param string              $hashKey
-     * @param string              $expires
-     * @param int                 $throttle
+     * @param  ConnectionInterface  $connection
+     * @param  string  $passwordlessTable
+     * @param  string  $hashKey
+     * @param  string  $expires
+     * @param  int  $throttle
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -52,11 +53,10 @@ class TokenRepository implements TokenInterface
     /**
      * Create new token
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     *
+     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
      * @return string|null
      */
-    public function create(CanUsePasswordlessAuthenticatable $user):? string
+    public function create(CanUsePasswordlessAuthenticatable $user): ?string
     {
         if ($this->recentlyCreatedToken($user)) {
             return null;
@@ -69,7 +69,7 @@ class TokenRepository implements TokenInterface
         $this->getPasswordlessTable()->insert([
             'email' => $user->getEmailForMagicLink(),
             'token' => Hash::make($token),
-            'created_at' => Carbon::now()
+            'created_at' => Carbon::now(),
         ]);
 
         return $token;
@@ -78,8 +78,7 @@ class TokenRepository implements TokenInterface
     /**
      * Determine if the given user recently created a password reset token.
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     *
+     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
      * @return bool
      */
     public function recentlyCreatedToken(CanUsePasswordlessAuthenticatable $user): bool
@@ -88,7 +87,7 @@ class TokenRepository implements TokenInterface
             ->where('email', $user->getEmailForMagicLink())
             ->first();
 
-        if (!$record) {
+        if (! $record) {
             return false;
         }
 
@@ -98,7 +97,7 @@ class TokenRepository implements TokenInterface
     /**
      * Check if was recently created based on throttle
      *
-     * @param string $createdAt
+     * @param  string  $createdAt
      * @return bool
      */
     private function tokenWasRecentlyCreated(string $createdAt): bool
@@ -115,9 +114,8 @@ class TokenRepository implements TokenInterface
     /**
      * Token exits and valid
      *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     * @param string                                                    $token
-     *
+     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
+     * @param  string  $token
      * @return bool
      */
     public function exist(CanUsePasswordlessAuthenticatable $user, string $token)
@@ -126,11 +124,11 @@ class TokenRepository implements TokenInterface
             ->where('email', $user->getEmailForMagicLink())
             ->first();
 
-        if (!$result) {
+        if (! $result) {
             return false;
         }
 
-        return !$this->tokenExpired($result->created_at) && Hash::check($token, $result->token);
+        return ! $this->tokenExpired($result->created_at) && Hash::check($token, $result->token);
     }
 
     /**
@@ -145,8 +143,7 @@ class TokenRepository implements TokenInterface
     }
 
     /**
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     *
+     * @param  \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable  $user
      * @return bool
      */
     public function delete(CanUsePasswordlessAuthenticatable $user): bool
@@ -164,6 +161,7 @@ class TokenRepository implements TokenInterface
     public function deleteExpired(): bool
     {
         $expiredAt = Carbon::now()->subSeconds($this->expires);
+
         return (bool) $this->getPasswordlessTable()
             ->where('created_at', '<=', $expiredAt)
             ->delete();

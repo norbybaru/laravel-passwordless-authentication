@@ -1,4 +1,6 @@
-<?php namespace NorbyBaru\Passwordless\Traits;
+<?php
+
+namespace NorbyBaru\Passwordless\Traits;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -8,16 +10,14 @@ use NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable;
 use NorbyBaru\Passwordless\Facades\Passwordless;
 
 /**
- *
  * Trait PasswordLessAuthenticate
- * @package NorbyBaru\Passwordless\Traits
  */
 trait PasswordlessAuth
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -25,8 +25,7 @@ trait PasswordlessAuth
     {
         $response = $this->verifyMagicLink($request);
 
-        if (!$response instanceof CanUsePasswordlessAuthenticatable) {
-
+        if (! $response instanceof CanUsePasswordlessAuthenticatable) {
             if ($request->wantsJson()) {
                 throw ValidationException::withMessages([
                     'email' => [trans($response)],
@@ -50,8 +49,7 @@ trait PasswordlessAuth
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     protected function redirectRoute(Request $request)
@@ -68,9 +66,9 @@ trait PasswordlessAuth
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return bool|\Illuminate\Contracts\Auth\Authenticatable|\NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable|null
+     *
      * @throws AuthorizationException
      */
     protected function verifyMagicLink(Request $request)
@@ -101,8 +99,8 @@ trait PasswordlessAuth
     /**
      * The user has been authenticated.
      *
-     * @param Request $request
-     * @param mixed   $user
+     * @param  Request  $request
+     * @param  mixed  $user
      * @return mixed
      */
     public function authenticatedResponse(Request $request, $user)
@@ -117,12 +115,12 @@ trait PasswordlessAuth
         return [
             'token' => 'required',
             'email' => 'required|email',
-            'hash' => 'required'
+            'hash' => 'required',
         ];
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     protected function requestCredentials(Request $request): array
