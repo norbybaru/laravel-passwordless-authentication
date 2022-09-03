@@ -1,20 +1,15 @@
-<?php namespace NorbyBaru\Passwordless\Notifications;
+<?php 
 
+namespace NorbyBaru\Passwordless\Notifications;
 
-
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NorbyBaru\Passwordless\Facades\Passwordless;
 use Illuminate\Notifications\Messages\MailMessage;
 
-/**
- * Class SendMagicLinkNotification
- * @package NorbyBaru\Passwordless\Notifications
- */
+
 class SendMagicLinkNotification extends Notification implements ShouldQueue
 {
     use Queueable;
