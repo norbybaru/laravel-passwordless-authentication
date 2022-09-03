@@ -114,7 +114,7 @@ class MagicLink
         return false;
     }
 
-    public function createToken(CanUsePasswordlessAuthenticatable $user): string
+    public function createToken(CanUsePasswordlessAuthenticatable $user): ?string
     {
         return $this->token->create($user);
     }
