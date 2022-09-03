@@ -8,7 +8,6 @@ on:
     paths:
       - '**.php'
 
-
 jobs:
   pint:
     name: pint

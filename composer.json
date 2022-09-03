@@ -34,7 +34,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "pint": "./vendor/bin/pint -v",
+        "fmt": "./vendor/bin/pint -v",
         "post-autoload-dump": [
             "@php ./vendor/bin/testbench package:discover --ansi"
         ],
