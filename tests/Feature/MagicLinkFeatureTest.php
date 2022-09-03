@@ -3,15 +3,15 @@
 namespace NorbyBaru\Passwordless\Tests\Feature;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
-use NorbyBaru\Passwordless\MagicLink;
-use NorbyBaru\Passwordless\Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use NorbyBaru\Passwordless\Facades\Passwordless;
+use NorbyBaru\Passwordless\MagicLink;
 use NorbyBaru\Passwordless\Notifications\SendMagicLinkNotification;
 use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
+use NorbyBaru\Passwordless\Tests\TestCase;
 
 class MagicLinkFeatureTest extends TestCase
 {
@@ -72,6 +72,7 @@ class MagicLinkFeatureTest extends TestCase
         $queryParams = collect(explode('&', substr($signedUrl, strpos($signedUrl, '?') + 1)))
             ->mapWithKeys(function ($value) {
                 $values = explode('=', $value);
+
                 return [$values[0] => $values[1]];
             });
         $url = Arr::first(explode('?', $signedUrl));
@@ -80,7 +81,7 @@ class MagicLinkFeatureTest extends TestCase
         $this->assertNotNull($queryParams['signature']);
         $this->assertNotNull($queryParams['expires']);
         $this->assertEquals($this->user->email, urldecode($queryParams['email']));
-        $this->assertEquals(config('app.url') . config('passwordless.callback_url'), $url);
+        $this->assertEquals(config('app.url').config('passwordless.callback_url'), $url);
         $this->assertNotNull($url);
     }
 
@@ -122,12 +123,13 @@ class MagicLinkFeatureTest extends TestCase
         $queryParams = collect(explode('&', substr($signedUrl, strpos($signedUrl, '?') + 1)))
             ->mapWithKeys(function ($value) {
                 $values = explode('=', $value);
+
                 return [$values[0] => $values[1]];
             });
 
         $credentials = [
             'token' => $queryParams->get('token'),
-            'email' => urldecode($queryParams->get('email'))
+            'email' => urldecode($queryParams->get('email')),
         ];
 
         $result = Passwordless::magicLink()->validateMagicLink($credentials);

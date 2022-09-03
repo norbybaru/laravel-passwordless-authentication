@@ -1,44 +1,26 @@
-<?php namespace NorbyBaru\Passwordless;
+<?php
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+namespace NorbyBaru\Passwordless;
 
-/**
- * Interface TokenInterface
- * @package NorbyBaru\Passwordless
- */
 interface TokenInterface
 {
     /**
      * Create new Token
-     *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     *
-     * @return string
      */
-    public function create(CanUsePasswordlessAuthenticatable $user);
+    public function create(CanUsePasswordlessAuthenticatable $user): ?string;
 
     /**
      * Token exists and valid
-     *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     * @param string                                                    $token
-     *
-     * @return bool
      */
-    public function exist(CanUsePasswordlessAuthenticatable $user, string $token);
+    public function exist(CanUsePasswordlessAuthenticatable $user, string $token): bool;
 
     /**
      * Deleted existing token
-     *
-     * @param \NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable $user
-     *
-     * @return bool
      */
-    public function delete(CanUsePasswordlessAuthenticatable $user);
+    public function delete(CanUsePasswordlessAuthenticatable $user): bool;
 
     /**
      * Delete all expired token
-     * @return bool
      */
-    public function deleteExpired();
+    public function deleteExpired(): bool;
 }

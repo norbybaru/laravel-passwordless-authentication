@@ -2,15 +2,14 @@
 
 namespace NorbyBaru\Passwordless\Tests\Unit;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use NorbyBaru\Passwordless\Tests\TestCase;
-use NorbyBaru\Passwordless\Tests\Fixtures\Models\User;
+use Illuminate\Support\Str;
 use NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable;
+use NorbyBaru\Passwordless\Tests\Fixtures\Models\User;
+use NorbyBaru\Passwordless\Tests\TestCase;
 
 class UserUnitTest extends TestCase
 {
-
     protected User $user;
 
     public function setUp(): void

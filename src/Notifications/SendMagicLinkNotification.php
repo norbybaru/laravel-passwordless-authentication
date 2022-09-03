@@ -1,42 +1,30 @@
-<?php namespace NorbyBaru\Passwordless\Notifications;
+<?php
 
+namespace NorbyBaru\Passwordless\Notifications;
 
-
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NorbyBaru\Passwordless\Facades\Passwordless;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Lang;
+use NorbyBaru\Passwordless\Facades\Passwordless;
 
-/**
- * Class SendMagicLinkNotification
- * @package NorbyBaru\Passwordless\Notifications
- */
 class SendMagicLinkNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Get the notification's channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array|string
      */
-    public function via($notifiable)
+    public function via($notifiable): array|string
     {
         return ['mail'];
     }
 
     /**
      * Build the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject(Lang::get('Sign in to :app_name', ['app_name' => env('APP_NAME', 'Laravel')]))
@@ -48,12 +36,9 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
 
     /**
      * Get the verification URL for the given notifiable.
-     *
-     * @param  mixed  $notifiable
-     * @return string
      */
-    protected function verificationUrl($notifiable)
+    protected function verificationUrl($notifiable): string
     {
-         return Passwordless::magicLink()->generateUrl($notifiable);
+        return Passwordless::magicLink()->generateUrl($notifiable);
     }
 }

@@ -2,18 +2,18 @@
 
 namespace NorbyBaru\Passwordless\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use NorbyBaru\Passwordless\PasswordlessServiceProvider;
 use NorbyBaru\Passwordless\Tests\Fixtures\Models\User;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase;
     use WithFaker;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -22,7 +22,7 @@ abstract class TestCase extends OrchestraTestCase
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      */
     public function getEnvironmentSetUp($app)
     {
@@ -31,7 +31,7 @@ abstract class TestCase extends OrchestraTestCase
 
     protected function defineRoutes($router)
     {
-        require __DIR__ . '/Fixtures/routes.php';
+        require __DIR__.'/Fixtures/routes.php';
     }
 
     /**
@@ -44,9 +44,9 @@ abstract class TestCase extends OrchestraTestCase
     {
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
         $app['config']->set('auth.providers.users.model', User::class);
     }
@@ -65,10 +65,9 @@ abstract class TestCase extends OrchestraTestCase
      * Get package providers.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             PasswordlessServiceProvider::class,

@@ -1,41 +1,25 @@
-<?php namespace NorbyBaru\Passwordless;
+<?php
 
+namespace NorbyBaru\Passwordless;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Str;
 
-/**
- * Class PasswordlessManager
- * @package NorbyBaru\Passwordless
- */
 class PasswordlessManager
 {
-    /** @var \Illuminate\Contracts\Foundation\Application  */
-    protected $app;
-
-    /**
-     * PasswordlessManager constructor.
-     *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     */
-    public function __construct($app)
+    public function __construct(protected Application $app)
     {
-        $this->app = $app;
     }
 
-    /**
-     * @return \NorbyBaru\Passwordless\MagicLink
-     */
     public function magicLink(): MagicLink
     {
-        $config =  $this->getPasswordlessConfig();
-
         return new MagicLink(
             $this->createTokenRepository(),
             $this->app['auth']->createUserProvider('users')
         );
     }
 
-    protected function createTokenRepository()
+    protected function createTokenRepository(): TokenRepository
     {
         $key = $this->app['config']['app.key'];
 
@@ -43,7 +27,7 @@ class PasswordlessManager
             $key = base64_decode(substr($key, 7));
         }
 
-        $config =  $this->getPasswordlessConfig();
+        $config = $this->getPasswordlessConfig();
 
         return new TokenRepository(
             $this->app['db']->connection(),
@@ -54,19 +38,12 @@ class PasswordlessManager
         );
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getAuthProvider()
+    protected function getAuthProvider(): mixed
     {
         return $this->app['config']['auth.providers.users'];
     }
 
-
-    /**
-     * @return array
-     */
-    protected function getPasswordlessConfig()
+    protected function getPasswordlessConfig(): array
     {
         return $this->app['config']->get('passwordless');
     }

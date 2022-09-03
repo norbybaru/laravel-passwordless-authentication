@@ -1,4 +1,5 @@
 <?php
+
 namespace NorbyBaru\Passwordless\Tests\Fixtures;
 
 use Illuminate\Routing\Controller;
@@ -13,6 +14,6 @@ class TestController extends Controller
 
     public function redirect()
     {
-        return response('Redirected ' . Auth::user()->name, 200);
+        return response('Redirected '.Auth::user()->name, 200);
     }
 }
