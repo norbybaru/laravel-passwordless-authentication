@@ -10,7 +10,6 @@ return [
     | This URL path can be customized to suit user url structure or preference.
     |
     */
-
     'callback_url' => '/callback/login',
 
     /*
@@ -33,7 +32,6 @@ return [
     |
     |
     */
-
     'provider' => 'users',
 
     /*
@@ -43,7 +41,6 @@ return [
     |
     |
     */
-
     'table' => 'passwordless_auth',
 
     /*
@@ -56,7 +53,6 @@ return [
     | they have less time to be guessed. You may change this as needed.
     |
     */
-
     'expire' => 60 * 60,
 
     /*
@@ -68,7 +64,6 @@ return [
     | Throttling is mechanism to prevent spamming user and exhausting system resource
     |
     */
-
     'throttle' => 60,
 
     /*
@@ -81,6 +76,5 @@ return [
     | they have less time to be guessed. You may change this as needed.
     |
     */
-
     'magic_link_timeout' => 60 * 60,
 ];
