@@ -9,7 +9,7 @@ class PasswordlessServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig();
-        $this->loadMigrations();
+        $this->publishDatabase();
         $this->loadRoutes();
     }
 
@@ -46,15 +46,14 @@ class PasswordlessServiceProvider extends ServiceProvider
     {
         $this->publishes([
             $this->configPath() => config_path('passwordless.php'),
-        ], 'config');
+        ], 'passwordless-config');
     }
 
-    /**
-     * Load migration files.
-     */
-    protected function loadMigrations()
+    protected function publishDatabase()
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->publishes([
+            __DIR__.'/../database/migrations/create_passwordless_auth_table.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_passwordless_auth_table.php'),
+        ], 'passwordless-migrations');
     }
 
     /**
