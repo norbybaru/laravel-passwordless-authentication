@@ -13,8 +13,4 @@ interface CanUsePasswordlessAuthenticatable
      * Send Magic link to user to login.
      */
     public function sendAuthenticationMagicLink(string $token): void;
-
-    public function getGeneratedMagicLinkToken(): ?string;
-
-    public function setGeneratedMagicLinkToken(string $token): void;
 }
