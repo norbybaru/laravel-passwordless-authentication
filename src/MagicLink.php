@@ -57,7 +57,7 @@ class MagicLink
         $this->user = $user;
     }
 
-    public function generateUrl(CanUsePasswordlessAuthenticatable $notifiable, bool $absoluteSignedUrl = true): string
+    public function generateUrl(CanUsePasswordlessAuthenticatable $notifiable, string $token): string
     {
         return URL::temporarySignedRoute(
             'passwordless.login',
@@ -65,9 +65,8 @@ class MagicLink
             [
                 'email' => $notifiable->getEmailForMagicLink(),
                 'hash' => sha1($notifiable->getEmailForMagicLink()),
-                'token' => $notifiable->getGeneratedMagicLinkToken(),
+                'token' => $token,
             ],
-            $absoluteSignedUrl
         );
     }
 

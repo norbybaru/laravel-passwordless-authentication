@@ -13,6 +13,10 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public function __construct(protected string $token)
+    {
+    }
+
     /**
      * Get the notification's channels.
      */
@@ -39,6 +43,6 @@ class SendMagicLinkNotification extends Notification implements ShouldQueue
      */
     protected function verificationUrl($notifiable): string
     {
-        return Passwordless::magicLink()->generateUrl($notifiable);
+        return Passwordless::magicLink()->generateUrl($notifiable, $this->token);
     }
 }

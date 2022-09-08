@@ -30,9 +30,63 @@ php artisan migrate
 
 # Basic Usage
 ## Preparing Model
+Open the `User::class` Model and make sure to implements `NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable::class` and add trait `NorbyBaru\Passwordless\Traits\PasswordlessAuthenticatable::class` to the class
+
+```php
+<?php
+
+namespace App\Models;
+
+...
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable;
+use NorbyBaru\Passwordless\Traits\PasswordlessAuthenticatable;
+
+class User extends Authenticatable implements CanUsePasswordlessAuthenticatable
+{
+    ...
+    use Notifiable;
+    use PasswordlessAuthenticatable;
+    ...
+}
+```
+
+## Preparing `config/passwordless.php`
+Open `config/passwordless.php` file and update `default_redirect_route` to the correct route name the user should land by default once authenticated in case you have different route name than `home`.
+
+eg.
+```
+'default_redirect_route' => 'dashboard',
+```
+
+## Setup Login Routes
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::post('login', function (Request $request) {
+    $validated = $request->validate([
+        'email' => 'required|email|exists:users',
+    ]);
+
+    $message = Passwordless::magicLink()->sendLink($validated);
+
+    return redirect()->back()->with([
+        'status' => $message
+    ]);
+});
+
+```
+
+## Setup Mail provider
 
 ## Setup Auth Provider
 
+# Advance Usage
+## Override MagicLinkNotification
 
 ## Run Unit Test
 ```sh

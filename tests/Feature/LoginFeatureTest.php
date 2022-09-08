@@ -27,8 +27,8 @@ class LoginFeatureTest extends TestCase
             'remember_token' => Str::random(10),
         ]);
 
-        $this->user->setGeneratedMagicLinkToken(Passwordless::magicLink()->createToken($this->user));
-        $this->signedUrl = Passwordless::magicLink()->generateUrl($this->user);
+        $token = Passwordless::magicLink()->createToken($this->user);
+        $this->signedUrl = Passwordless::magicLink()->generateUrl($this->user, $token);
     }
 
     public function test_it_should_successfully_login_user()

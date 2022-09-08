@@ -66,8 +66,8 @@ class MagicLinkFeatureTest extends TestCase
 
     public function test_it_should_generate_temporary_signed_url()
     {
-        $this->user->setGeneratedMagicLinkToken(Passwordless::magicLink()->createToken($this->user));
-        $signedUrl = Passwordless::magicLink()->generateUrl($this->user);
+        $token = Passwordless::magicLink()->createToken($this->user);
+        $signedUrl = Passwordless::magicLink()->generateUrl($this->user, $token);
 
         $queryParams = collect(explode('&', substr($signedUrl, strpos($signedUrl, '?') + 1)))
             ->mapWithKeys(function ($value) {
@@ -118,8 +118,8 @@ class MagicLinkFeatureTest extends TestCase
 
     public function test_it_should_successfully_validate_magic_link()
     {
-        $this->user->setGeneratedMagicLinkToken(Passwordless::magicLink()->createToken($this->user));
-        $signedUrl = Passwordless::magicLink()->generateUrl($this->user);
+        $token = Passwordless::magicLink()->createToken($this->user);
+        $signedUrl = Passwordless::magicLink()->generateUrl($this->user, $token);
         $queryParams = collect(explode('&', substr($signedUrl, strpos($signedUrl, '?') + 1)))
             ->mapWithKeys(function ($value) {
                 $values = explode('=', $value);
