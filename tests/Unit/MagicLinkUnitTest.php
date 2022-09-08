@@ -3,16 +3,17 @@
 namespace NorbyBaru\Passwordless\Tests\Unit;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use NorbyBaru\Passwordless\MagicLink;
-use NorbyBaru\Passwordless\Tests\TestCase;
+use Illuminate\Support\Str;
 use NorbyBaru\Passwordless\Facades\Passwordless;
+use NorbyBaru\Passwordless\MagicLink;
 use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
+use NorbyBaru\Passwordless\Tests\TestCase;
 
-class MagicLinkUnitTest extends TestCase 
+class MagicLinkUnitTest extends TestCase
 {
     protected MagicLink $magicLink;
+
     protected UserModel $user;
 
     public function setUp(): void

@@ -3,22 +3,22 @@
 namespace NorbyBaru\Passwordless\Tests\Unit;
 
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
 use NorbyBaru\Passwordless\Tests\TestCase;
 use NorbyBaru\Passwordless\TokenRepository;
-use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
 
 class TokenRepositoryUnitTest extends TestCase
 {
-
     protected TokenRepository $tokenRepository;
+
     protected UserModel $user;
 
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $this->tokenRepository = $this->getTokenRepository();
 
         $this->user = UserModel::create([
@@ -78,6 +78,7 @@ class TokenRepositoryUnitTest extends TestCase
         $isValid = $this->tokenRepository->exist($this->user, Str::random(40));
         $this->assertFalse($isValid);
     }
+
     public function test_it_should_validate_that_expired_token_is_invalid()
     {
         $knowTime = Carbon::now()->subSeconds(config('passwordless.expire'));
@@ -119,7 +120,7 @@ class TokenRepositoryUnitTest extends TestCase
 
         $this->assertDatabaseCount(config('passwordless.table'), 0);
     }
-    
+
     private function getTokenRepository(): TokenRepository
     {
         $key = $this->app['config']['app.key'];
