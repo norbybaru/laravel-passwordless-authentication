@@ -104,7 +104,7 @@ class TokenRepository implements TokenInterface
 
     public function deleteExpired(): bool
     {
-        $expiredAt = Carbon::now()->subSeconds($this->expires);
+        $expiredAt = Carbon::now()->addSeconds($this->expires);
 
         return (bool) $this->getPasswordlessTable()
             ->where('created_at', '<=', $expiredAt)
