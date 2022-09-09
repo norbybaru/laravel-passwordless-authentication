@@ -30,7 +30,7 @@ trait PasswordlessAuth
                 ]);
             }
 
-            return redirect()->to($this->redirectRoute($request))
+            return redirect()->to($this->redirectRoute($request, false))
                     ->withInput($request->only('email'))
                     ->withErrors(['email' => trans($response)]);
         }
@@ -46,7 +46,7 @@ trait PasswordlessAuth
             : redirect()->intended($this->redirectRoute($request));
     }
 
-    protected function redirectRoute(Request $request): string
+    protected function redirectRoute(Request $request, bool $success = true): string
     {
         if ($request->get('redirect_to')) {
             return $request->get('redirect_to');
@@ -56,7 +56,13 @@ trait PasswordlessAuth
             return $this->redirectTo();
         }
 
-        return route(config('passwordless.default_redirect_route'));
+        $routeName = config('passwordless.default_redirect_route');
+
+        if (! $success) {
+            $routeName = config('passwordless.login_route');
+        }
+
+        return route($routeName);
     }
 
     protected function verifyMagicLink(Request $request): string|Authenticatable|CanUsePasswordlessAuthenticatable

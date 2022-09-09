@@ -1,3 +1,6 @@
+[![Run Unit Tests](https://github.com/norbybaru/laravel-passwordless-authentication/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/norbybaru/laravel-passwordless-authentication/actions/workflows/run-tests.yml) [![PHPStan](https://github.com/norbybaru/laravel-passwordless-authentication/actions/workflows/phpstan.yml/badge.svg?branch=main)](https://github.com/norbybaru/laravel-passwordless-authentication/actions/workflows/phpstan.yml) [![Laravel Pint](https://github.com/norbybaru/laravel-passwordless-authentication/actions/workflows/pint.yml/badge.svg?branch=main)](https://github.com/norbybaru/laravel-passwordless-authentication/actions/workflows/pint.yml)
+
+![PASSWORDLESS-AUTH](./loginlink.png)
 # LARAVEL PASSWORDLESS AUTHENTICATION
 Laravel Passwordless Authentication with Magic Link.
 
@@ -53,14 +56,22 @@ class User extends Authenticatable implements CanUsePasswordlessAuthenticatable
 ```
 
 ## Preparing `config/passwordless.php`
-Open `config/passwordless.php` file and update `default_redirect_route` to the correct route name the user should land by default once authenticated in case you have different route name than `home`.
-
+Open config file `config/passwordless.php`
+- Update `default_redirect_route` to the correct route name the user should land by default once authenticated in case you have different route name than `home`.
 eg.
 ```
 'default_redirect_route' => 'dashboard',
 ```
 
+- Update `login_route` to the correct route name of your login page to allow redirecting user
+back to that page on invalid magic link.
+eg.
+```
+'login_route' => 'auth.login',
+```
+
 ## Setup Login Routes
+Make sure to setup new login routes and update your application to use the new login route
 
 ```php
 <?php
@@ -72,16 +83,41 @@ Route::post('login', function (Request $request) {
         'email' => 'required|email|exists:users',
     ]);
 
-    $message = Passwordless::magicLink()->sendLink($validated);
+    $status = Passwordless::magicLink()->sendLink($validated);
 
     return redirect()->back()->with([
-        'status' => $message
+        'status' => trans($message)
     ]);
 });
 
 ```
 
-## Setup Mail provider
+## Setup Mail Provider
+Make sure to have your application mail provider setup and working 100% for your Laravel application
+```
+MAIL_MAILER=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+## Setup Translations
+Add file `passwordless.php` in your translations directory and copy the entry below.
+Feel free to update text to suit your application needs.
+
+```php
+return [
+    'sent' => 'Login link sent to inbox.',
+    'throttled' => 'Login link was already sent. Please check your inbox or try again later.',
+    'invalid_token' => 'Invalid link supplied. Please request new one.',
+    'invalid_user' => 'Invalid user info supplied.',
+    'verified' => 'Login successful.',
+];
+```
 
 ## Setup Auth Provider
 

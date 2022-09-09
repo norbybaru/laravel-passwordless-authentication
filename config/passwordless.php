@@ -26,6 +26,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Login route name
+    |--------------------------------------------------------------------------
+    |
+    | Set current login route name of your application to give the package ability to redirect to the page
+    | whenever an issue occurred with magic link validation
+    |
+    */
+    'login_route' => 'login',
+
+    /*
+    |--------------------------------------------------------------------------
     | Auth Provider
     |--------------------------------------------------------------------------
     |
