@@ -1,6 +1,8 @@
+.DS_Store
 /.vscode
 /*.cache
 /build
 /composer.lock
 /vendor
 phpunit.xml
+phpunit.xml.dist.bak
