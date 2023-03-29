@@ -126,9 +126,6 @@ class TokenRepository implements TokenInterface
         return $this->connection->table($this->table);
     }
 
-    /**
-     * @return string
-     */
     protected function getTable(): string
     {
         return $this->table;
