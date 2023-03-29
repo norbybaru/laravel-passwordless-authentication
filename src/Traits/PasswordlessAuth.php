@@ -82,9 +82,6 @@ trait PasswordlessAuth
         return $user;
     }
 
-    /**
-     * @param $user
-     */
     public function authenticateUser($user)
     {
         auth()->login($user);
