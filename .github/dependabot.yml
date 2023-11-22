@@ -17,5 +17,5 @@ updates:
     schedule:
       interval: "weekly"
     labels:
-      - "php"
+      - "composer"
       - "dependencies"
