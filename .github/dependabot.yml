@@ -12,8 +12,6 @@ updates:
   # Maintain dependencies for Composer
   - package-ecosystem: "composer"
     directory: "/"
-    registries:
-      - spark
     schedule:
       interval: "weekly"
     labels:
