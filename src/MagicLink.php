@@ -47,14 +47,8 @@ class MagicLink
      */
     const MAGIC_LINK_VERIFIED = 'passwordless.verified';
 
-    protected TokenInterface $token;
-
-    protected UserProvider $user;
-
-    public function __construct(TokenInterface $tokenInterface, UserProvider $user)
+    public function __construct(protected TokenInterface $token, protected UserProvider $user)
     {
-        $this->token = $tokenInterface;
-        $this->user = $user;
     }
 
     public function generateUrl(CanUsePasswordlessAuthenticatable $notifiable, string $token): string
