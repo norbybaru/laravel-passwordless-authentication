@@ -2,11 +2,9 @@
 
 ![PASSWORDLESS-AUTH](./loginlink.png)
 # LARAVEL PASSWORDLESS AUTHENTICATION
-Laravel Passwordless Authentication with Magic Link.
+Laravel Passwordless Authentication using Magic Link.
 
-This package allows authentication via email link. 
-It removes the need for users to provide password to authenticate but rely on user email address to send
-them a login link to their inbox to follow to authenticate user securely.
+This package enables authentication through email links, eliminating the requirement for users to input passwords for authentication. Instead, it leverages the user's email address to send a login link to their inbox. Users can securely authenticate by clicking on this link. It's important to note that the package does not include a user interface for the authentication page; it assumes that the application's login page will be custom-built. Make sure to scaffold your login UI page accordingly to integrate seamlessly with this package.
 
 **PS. Email provider must be setup correctly and working to email magic link to authenticate user**
 
@@ -22,18 +20,18 @@ php artisan vendor:publish --provider="NorbyBaru\Passwordless\PasswordlessServic
 ```
 
 ## Preparing the database
-You need to publish the migration to create table:
+Publish the migration to create required table:
 ```sh
 php artisan vendor:publish --provider="NorbyBaru\Passwordless\PasswordlessServiceProvider" --tag="passwordless-migrations"
 ```
-After that, you need to run migrations.
+Run migrations.
 ```sh
 php artisan migrate
 ```
 
 # Basic Usage
 ## Preparing Model
-Open the `User::class` Model and make sure to implements `NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable::class` and add trait `NorbyBaru\Passwordless\Traits\PasswordlessAuthenticatable::class` to the class
+Open the `User::class` Model and ensure to implements `NorbyBaru\Passwordless\CanUsePasswordlessAuthenticatable::class` and to add trait `NorbyBaru\Passwordless\Traits\PasswordlessAuthenticatable::class` to the class
 
 ```php
 <?php
@@ -71,7 +69,7 @@ eg.
 ```
 
 ## Setup Login Routes
-Make sure to setup new login routes and update your application to use the new login route
+Update application Login routes to sen Magic Link to user
 
 ```php
 <?php
@@ -119,10 +117,19 @@ return [
 ];
 ```
 
-## Setup Auth Provider
-
 # Advance Usage
 ## Override MagicLinkNotification
+
+To override default notification template, override method `sendAuthenticationMagicLink` in your User model which implements interface `CanUsePasswordlessAuthenticatable`
+
+```php
+public function sendAuthenticationMagicLink(string $token): void
+{
+    // Replace with your notification class.
+
+    // eg. $this->notify(new SendMagicLinkNotification($token));
+}
+```
 
 ## Run Unit Test
 ```sh

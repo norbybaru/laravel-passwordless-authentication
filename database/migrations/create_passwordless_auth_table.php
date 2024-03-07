@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('passwordless_auth', function (Blueprint $table) {
+        Schema::create(config('passwordless.table'), function (Blueprint $table) {
             $table->id();
             $table->string('email')->index();
             $table->string('token')->unique();
