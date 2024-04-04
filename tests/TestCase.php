@@ -4,9 +4,12 @@ namespace NorbyBaru\Passwordless\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use NorbyBaru\Passwordless\PasswordlessServiceProvider;
 use NorbyBaru\Passwordless\Tests\Fixtures\Models\User;
+use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
@@ -14,11 +17,21 @@ abstract class TestCase extends OrchestraTestCase
     use RefreshDatabase;
     use WithFaker;
 
+    protected UserModel $user;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->setUpFaker();
         Notification::fake();
+
+        $this->user = UserModel::create([
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password' => Hash::make(Str::random(10)),
+            'remember_token' => Str::random(10),
+        ]);
     }
 
     /**
@@ -42,12 +55,6 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function defineEnvironment($app)
     {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
         $app['config']->set('auth.providers.users.model', User::class);
     }
 
@@ -58,7 +65,7 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function defineDatabaseMigrations()
     {
-        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(base_path('migrations'));
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 

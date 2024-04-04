@@ -5,10 +5,7 @@ namespace NorbyBaru\Passwordless\Tests\Feature;
 use Carbon\Carbon;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use NorbyBaru\Passwordless\Facades\Passwordless;
-use NorbyBaru\Passwordless\Tests\Fixtures\Models\User as UserModel;
 use NorbyBaru\Passwordless\Tests\TestCase;
 
 class LoginFeatureTest extends TestCase
@@ -18,14 +15,6 @@ class LoginFeatureTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->user = UserModel::create([
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'email_verified_at' => now(),
-            'password' => Hash::make(Str::random(10)),
-            'remember_token' => Str::random(10),
-        ]);
 
         $token = Passwordless::magicLink()->createToken($this->user);
         $this->signedUrl = Passwordless::magicLink()->generateUrl($this->user, $token);
