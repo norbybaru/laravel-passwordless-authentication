@@ -42,12 +42,6 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function defineEnvironment($app)
     {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
         $app['config']->set('auth.providers.users.model', User::class);
     }
 
@@ -58,7 +52,7 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function defineDatabaseMigrations()
     {
-        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(base_path('migrations'));
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 

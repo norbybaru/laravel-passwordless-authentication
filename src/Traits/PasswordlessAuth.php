@@ -31,8 +31,8 @@ trait PasswordlessAuth
             }
 
             return redirect()->to($this->redirectRoute($request, false))
-                    ->withInput($request->only('email'))
-                    ->withErrors(['email' => trans($response)]);
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => trans($response)]);
         }
 
         $this->authenticateUser($response);
