@@ -4,7 +4,6 @@ namespace NorbyBaru\Passwordless\Tests\Feature;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use NorbyBaru\Passwordless\Facades\Passwordless;
@@ -15,21 +14,6 @@ use NorbyBaru\Passwordless\Tests\TestCase;
 
 class MagicLinkFeatureTest extends TestCase
 {
-    protected UserModel $user;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->user = UserModel::create([
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'email_verified_at' => now(),
-            'password' => Hash::make(Str::random(10)),
-            'remember_token' => Str::random(10),
-        ]);
-    }
-
     public function test_it_can_generate_magic_link()
     {
         $token = Passwordless::magicLink()->createToken($this->user);
