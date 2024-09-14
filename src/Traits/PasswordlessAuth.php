@@ -67,6 +67,9 @@ trait PasswordlessAuth
 
     protected function verifyMagicLink(Request $request): string|Authenticatable|CanUsePasswordlessAuthenticatable
     {
+        $token = request()->segment(2);
+        $request->merge(['token' => $token]);
+        
         $request->validate($this->requestRules());
 
         $user = $this->magicLink()->validateMagicLink($this->requestCredentials($request));
@@ -100,7 +103,7 @@ trait PasswordlessAuth
     protected function requestRules(): array
     {
         return [
-            'token' => 'required',
+            // 'token' => 'required',
             'email' => 'required|email',
             'hash' => 'required',
         ];
